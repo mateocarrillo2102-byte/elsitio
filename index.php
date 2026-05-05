@@ -1,10 +1,10 @@
 <?php
-$server = $_ENV['MYSQLHOST'];
-$user   = $_ENV['MYSQLUSER'];
-$pass   = $_ENV['MYSQLPASSWORD'];
-$bd     = $_ENV['MYSQLDATABASE'];
-$port   = $_ENV['MYSQLPORT'];
-$enlace = mysqli_connect($server, $user, $pass, $bd, $port);
+$server = getenv('MYSQLHOST');
+$user   = getenv('MYSQLUSER');
+$pass   = getenv('MYSQLPASSWORD');
+$bd     = getenv('MYSQLDATABASE');
+$port   = (int) getenv('MYSQLPORT');
+$enlace = new mysqli($server, $user, $pass, $bd, $port);
 if (!$enlace) {
 die("Error de conexión");
 }
