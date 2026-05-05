@@ -1,9 +1,9 @@
 <?php
-$server = "switchback.proxy.rlwy.net";
-$user = "root";
-$pass = "cMwQeNorYvkpUdkfegrlqKBrnPEqKbou";
-$bd = "railway";
-$port = "27789";
+$server = $_ENV['MYSQLHOST'];
+$user   = $_ENV['MYSQLUSER'];
+$pass   = $_ENV['MYSQLPASSWORD'];
+$bd     = $_ENV['MYSQLDATABASE'];
+$port   = $_ENV['MYSQLPORT'];
 $enlace = mysqli_connect($server, $user, $pass, $bd, $port);
 if (!$enlace) {
 die("Error de conexión");
