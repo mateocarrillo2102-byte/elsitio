@@ -342,46 +342,6 @@ if (isset($_GET['logout'])) {
   <!-- PRODUCTOS MÁS VENDIDOS -->
   <div class="section" id="sec-productos">
     <div class="section-title">Productos Más Vendidos</div>
-    <?php
-    $productos_data = [];
-    $max_unidades = 1;
-    while($pr = $res_productos->fetch_assoc()) {
-        $productos_data[] = $pr;
-        if ($pr['unidades'] > $max_unidades) $max_unidades = $pr['unidades'];
-    }
-    ?>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Producto</th>
-            <th>Unidades Vendidas</th>
-            <th>Ingresos</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($productos_data as $i => $pr): ?>
-          <tr>
-            <td style="color:var(--muted);font-size:12px;"><?= $i+1 ?></td>
-            <td style="font-weight:600;"><?= htmlspecialchars($pr['nombre']) ?></td>
-            <td>
-              <div class="bar-wrap">
-                <div class="bar-bg">
-                  <div class="bar-fill" style="width:<?= round($pr['unidades']/$max_unidades*100) ?>%"></div>
-                </div>
-                <div class="bar-num"><?= $pr['unidades'] ?></div>
-              </div>
-            </td>
-            <td style="font-family:'Orbitron';font-size:.9rem;color:var(--pink);"><?= fmt($pr['ingresos']) ?></td>
-          </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
 
 <script>
 function showTab(name, btn) {
