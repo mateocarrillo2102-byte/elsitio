@@ -1,5 +1,8 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Extensions.mysqli"]
+nixPkgs = ["php82", "php82Extensions.mysqli", "php82Extensions.pdo_mysql"]
+
+[variables]
+PORT = "8080"
 
 [start]
-cmd = "php -S 0.0.0.0:$PORT"
+cmd = "php -S 0.0.0.0:8080"
