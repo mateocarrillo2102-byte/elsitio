@@ -1,10 +1,10 @@
 <?php
-$servidor = "switchback.proxy.rlwy.net";
-$usuario = "root";
-$clave = "cMwQeNorYvkpUdkfegrlqKBrnPEqKbou";
-$basededatos = "railway";
-$puerto = "27789";
-$enlace = mysqli_connect($servidor, $usuario, $clave, $basededatos, $puerto);
+$server = "switchback.proxy.rlwy.net";
+$user = "root";
+$pass = "cMwQeNorYvkpUdkfegrlqKBrnPEqKbou";
+$bd = "railway";
+$port = "27789";
+$enlace = mysqli_connect($server, $user, $pass, $bd, $port);
 if (!$enlace) {
 die("Error de conexión");
 }
