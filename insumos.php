@@ -107,20 +107,20 @@ $resultado = mysqli_query($enlace, $sql);
     <aside class="sidebar">
         <div class="logo"><h2>EL SITIO</h2><p>Administrador</p></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="admin.php" class="nav-link active">📊 Panel Principal</a></li>
-            <li class="nav-item"><a href="clientes.php" class="nav-link">👥 Clientes</a></li>
-            <li class="nav-item"><a href="productos.php" class="nav-link">🍔 Productos</a></li>
-            <li class="nav-item"><a href="insumos.php" class="nav-link active">📦 Insumos</a></li>
-            <li class="nav-item"><a href="producto_insumos.php" class="nav-link">🔗 Prod. × Insumos</a></li>
-            <li class="nav-item"><a href="domiciliarios.php" class="nav-link">🛵 Domiciliarios</a></li>
-            <li class="nav-item"><a href="pedidos.php" class="nav-link">📦 Pedidos</a></li>
+            <li class="nav-item"><a href="admin.php" class="nav-link active"> Panel Principal</a></li>
+            <li class="nav-item"><a href="clientes.php" class="nav-link"> Clientes</a></li>
+            <li class="nav-item"><a href="productos.php" class="nav-link"> Productos</a></li>
+            <li class="nav-item"><a href="insumos.php" class="nav-link active"> Insumos</a></li>
+            <li class="nav-item"><a href="producto_insumos.php" class="nav-link"> Prod. × Insumos</a></li>
+            <li class="nav-item"><a href="domiciliarios.php" class="nav-link"> Domiciliarios</a></li>
+            <li class="nav-item"><a href="pedidos.php" class="nav-link"> Pedidos</a></li>
         </ul>
-        <div style="padding: 20px;"><a href="login.php" class="logout-btn">🚪 Cerrar Sesión</a></div>
+        <div style="padding: 20px;"><a href="Login.html" class="logout-btn"> Cerrar Sesión</a></div>
     </aside>
     <main class="main-content">
         <div class="page-header">
-            <h1>📦 Insumos / Inventario</h1>
-            <button class="btn-primary" id="openModalBtn">+ Agregar Insumo</button>
+            <h1> Insumos / Inventario</h1>
+            <button class="btn-primary" id="openModalBtn"> Agregar Insumo</button>
         </div>
 
         <div class="table-container">
@@ -140,14 +140,14 @@ $resultado = mysqli_query($enlace, $sql);
                         <td><?= number_format($row['cantidad_minima'], 2) ?></td>
                         <td>
                             <?php if ($stock_bajo): ?>
-                                <span class="badge badge-danger">⚠️ Stock bajo</span>
+                                <span class="badge badge-danger">⚠ Stock bajo</span>
                             <?php else: ?>
                                 <span class="badge badge-warning">✓ Normal</span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <button class="btn-warning btn-sm" onclick="abrirModalMovimiento(<?= $row['id_insumo'] ?>, '<?= htmlspecialchars($row['nombre']) ?>')">📦 Movimiento</button>
-                            <button class="btn-warning btn-sm" onclick="abrirModalEditar(<?= $row['id_insumo'] ?>, '<?= htmlspecialchars($row['nombre']) ?>', '<?= $row['unidad_medida'] ?>', <?= $row['cantidad_disponible'] ?>, <?= $row['cantidad_minima'] ?>)">✏️ Editar</button>
+                            <button class="btn-warning btn-sm" onclick="abrirModalMovimiento(<?= $row['id_insumo'] ?>, '<?= htmlspecialchars($row['nombre']) ?>')"> Movimiento</button>
+                            <button class="btn-warning btn-sm" onclick="abrirModalEditar(<?= $row['id_insumo'] ?>, '<?= htmlspecialchars($row['nombre']) ?>', '<?= $row['unidad_medida'] ?>', <?= $row['cantidad_disponible'] ?>, <?= $row['cantidad_minima'] ?>)">✏ Editar</button>
                             <a href="insumos.php?eliminar=<?= $row['id_insumo'] ?>" class="btn-danger btn-sm" onclick="return confirm('¿Eliminar este insumo?')">🗑️</a>
                         </td>
                     </tr>
@@ -161,7 +161,7 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Agregar Insumo -->
 <div class="modal" id="modalAgregar">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">➕ Nuevo Insumo</h3>
+        <h3 style="color:#00f5ff; margin-bottom:20px;"> Nuevo Insumo</h3>
         <form method="POST">
             <input type="hidden" name="accion" value="agregar">
             <input type="text" name="nombre" placeholder="Nombre del insumo" required>
@@ -182,7 +182,7 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Editar Insumo -->
 <div class="modal" id="modalEditar">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">✏️ Editar Insumo</h3>
+        <h3 style="color:#00f5ff; margin-bottom:20px;"> Editar Insumo</h3>
         <form method="POST">
             <input type="hidden" name="accion" value="editar">
             <input type="hidden" name="id_insumo" id="edit_id">
@@ -204,14 +204,14 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Movimiento Inventario -->
 <div class="modal" id="modalMovimiento">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">📦 Registrar Movimiento</h3>
+        <h3 style="color:#00f5ff; margin-bottom:20px;"> Registrar Movimiento</h3>
         <form method="POST">
             <input type="hidden" name="accion" value="movimiento">
             <input type="hidden" name="id_insumo" id="mov_id">
             <p style="margin:10px 0;"><strong id="mov_nombre"></strong></p>
             <select name="tipo" required>
-                <option value="entrada">📥 Entrada (Compras)</option>
-                <option value="salida">📤 Salida (Consumo)</option>
+                <option value="entrada"> Entrada (Compras)</option>
+                <option value="salida"> Salida (Consumo)</option>
             </select>
             <input type="number" step="0.01" name="cantidad" placeholder="Cantidad" required>
             <textarea name="descripcion" rows="2" placeholder="Descripción (ej: Compra semanal, producción, etc.)"></textarea>
@@ -237,7 +237,7 @@ $resultado = mysqli_query($enlace, $sql);
     
     function abrirModalMovimiento(id, nombre) {
         document.getElementById('mov_id').value = id;
-        document.getElementById('mov_nombre').innerHTML = '📦 ' + nombre;
+        document.getElementById('mov_nombre').innerHTML = ' ' + nombre;
         document.getElementById('modalMovimiento').classList.add('active');
     }
 </script>

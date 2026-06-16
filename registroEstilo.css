@@ -134,8 +134,66 @@ label { display: block; font-size: 0.65rem; letter-spacing: 0.15em; text-transfo
   box-shadow: 0 0 16px rgba(255, 45, 158, 0.5);
 }
 .btn:active { transform: scale(0.97); }
-
-/* Registro */
 .register { text-align: center; margin-top: 1.4rem; font-size: 0.7rem; color: #555; }
 .register a { color: #39ff14; text-decoration: none; }
 .register a:hover { text-shadow: 0 0 6px #39ff14; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: #11111a;
+            border: 1px solid #00f5ff;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            animation: fadeIn 0.5s ease;
+        }
+        .check-icon {
+            font-size: 4rem;
+            color: #39ff14;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #00f5ff;
+            margin-bottom: 15px;
+        }
+        p {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+        .countdown {
+            color: #ffe600;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #00f5ff, #ff2d9e);
+            color: #0a0a0f;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,245,255,0.4);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }

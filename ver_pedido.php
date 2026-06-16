@@ -3,7 +3,10 @@ session_start();
 include "conexion.php";
 
 $id_pedido = $_GET['id'];
-$sql_pedido = "SELECT p.*, c.nombre as cliente_nombre, c.telefono, c.direccion FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $id_pedido";
+$sql_pedido = "SELECT p.*, u.nombre as cliente_nombre, u.email 
+               FROM pedido p 
+               INNER JOIN usuario u ON p.id_usuario = u.id_usuario 
+               WHERE p.id_pedido = $id_pedido";
 $pedido = mysqli_fetch_assoc(mysqli_query($enlace, $sql_pedido));
 
 $sql_detalle = "SELECT dp.*, pr.nombre as producto_nombre FROM detallepedido dp INNER JOIN producto pr ON dp.id_producto = pr.id_producto WHERE dp.id_pedido = $id_pedido";
@@ -28,15 +31,15 @@ if ($pedido['id_domiciliario']) {
 </head>
 <body>
 <div class="container">
-    <h1>📋 Detalle Pedido #<?= $id_pedido ?></h1>
+    <h1> Detalle Pedido #<?= $id_pedido ?></h1>
     <div class="info">
-        <p><strong>👤 Cliente:</strong> <?= htmlspecialchars($pedido['cliente_nombre']) ?></p>
-        <p><strong>📞 Teléfono:</strong> <?= $pedido['telefono'] ?></p>
-        <p><strong>📍 Dirección:</strong> <?= $pedido['direccion'] ?></p>
-        <p><strong>📅 Fecha:</strong> <?= $pedido['fecha_pedido'] ?></p>
-        <p><strong>💰 Método de pago:</strong> <?= ucfirst($pedido['metodo_pago'] ?? 'Efectivo') ?></p>
-        <p><strong>🛵 Domiciliario:</strong> <?= $dom_nombre ?: 'No asignado' ?></p>
-        <p><strong>📝 Observaciones:</strong> <?= $pedido['observaciones'] ?: 'Ninguna' ?></p>
+        <p><strong> Cliente:</strong> <?= htmlspecialchars($pedido['cliente_nombre']) ?></p>
+        <p><strong> Teléfono:</strong> <?= $pedido['telefono'] ?></p>
+        <p><strong> Dirección:</strong> <?= $pedido['direccion'] ?></p>
+        <p><strong> Fecha:</strong> <?= $pedido['fecha_pedido'] ?></p>
+        <p><strong> Método de pago:</strong> <?= ucfirst($pedido['metodo_pago'] ?? 'Efectivo') ?></p>
+        <p><strong> Domiciliario:</strong> <?= $dom_nombre ?: 'No asignado' ?></p>
+        <p><strong> Observaciones:</strong> <?= $pedido['observaciones'] ?: 'Ninguna' ?></p>
     </div>
     <h3>🛒 Productos</h3>
     <table><thead><tr><th>Producto</th><th>Cantidad</th><th>Subtotal</th></tr></thead>

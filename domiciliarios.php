@@ -82,19 +82,19 @@ $resultado = mysqli_query($enlace, $sql);
     <aside class="sidebar">
         <div class="logo"><h2>EL SITIO</h2><p>Administrador</p></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="dashboard.php" class="nav-link">📊 Dashboard</a></li>
-            <li class="nav-item"><a href="clientes.php" class="nav-link">👥 Clientes</a></li>
-            <li class="nav-item"><a href="productos.php" class="nav-link">🍔 Productos</a></li>
-            <li class="nav-item"><a href="insumos.php" class="nav-link">📦 Insumos</a></li>
-            <li class="nav-item"><a href="producto_insumos.php" class="nav-link">🔗 Prod. × Insumos</a></li>
-            <li class="nav-item"><a href="domiciliarios.php" class="nav-link active">🛵 Domiciliarios</a></li>
-            <li class="nav-item"><a href="pedidos.php" class="nav-link">📦 Pedidos</a></li>
+            <li class="nav-item"><a href="dashboard.php" class="nav-link"> Dashboard</a></li>
+            <li class="nav-item"><a href="clientes.php" class="nav-link"> Clientes</a></li>
+            <li class="nav-item"><a href="productos.php" class="nav-link"> Productos</a></li>
+            <li class="nav-item"><a href="insumos.php" class="nav-link"> Insumos</a></li>
+            <li class="nav-item"><a href="producto_insumos.php" class="nav-link"> Prod. × Insumos</a></li>
+            <li class="nav-item"><a href="domiciliarios.php" class="nav-link active"> Domiciliarios</a></li>
+            <li class="nav-item"><a href="pedidos.php" class="nav-link"> Pedidos</a></li>
         </ul>
-        <div style="padding: 20px;"><a href="login.php" class="logout-btn">🚪 Cerrar Sesión</a></div>
+        <div style="padding: 20px;"><a href="Login.html" class="logout-btn"> Cerrar Sesión</a></div>
     </aside>
     <main class="main-content">
         <div class="page-header">
-            <h1>🛵 Domiciliarios</h1>
+            <h1> Domiciliarios</h1>
             <button class="btn-primary" id="openModalBtn">+ Agregar Domiciliario</button>
         </div>
         <div class="table-container">
@@ -109,20 +109,20 @@ $resultado = mysqli_query($enlace, $sql);
                         <td><?= htmlspecialchars($row['nombre']) ?></td>
                         <td><?= $row['telefono'] ?></td>
                         <td>
-                            <?php if ($row['medio_transporte'] == 'moto') echo '🏍️ Moto'; ?>
-                            <?php if ($row['medio_transporte'] == 'bicicleta') echo '🚲 Bicicleta'; ?>
-                            <?php if ($row['medio_transporte'] == 'a pie') echo '🚶 A pie'; ?>
-                            <?php if ($row['medio_transporte'] == 'otro') echo '🚗 Otro'; ?>
+                            <?php if ($row['medio_transporte'] == 'moto') echo ' Moto'; ?>
+                            <?php if ($row['medio_transporte'] == 'bicicleta') echo ' Bicicleta'; ?>
+                            <?php if ($row['medio_transporte'] == 'a pie') echo ' A pie'; ?>
+                            <?php if ($row['medio_transporte'] == 'otro') echo ' Otro'; ?>
                         </td>
                         <td>
                             <?php if ($row['disponible']): ?>
-                                <span class="badge-disponible">✓ Disponible</span>
+                                <span class="badge-disponible"> Disponible</span>
                             <?php else: ?>
-                                <span class="badge-ocupado">⏳ Ocupado</span>
+                                <span class="badge-ocupado"> Ocupado</span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <button class="btn-warning btn-sm" onclick="abrirModalEditar(<?= $row['id_domiciliario'] ?>, '<?= htmlspecialchars($row['nombre']) ?>', '<?= $row['telefono'] ?>', '<?= $row['medio_transporte'] ?>', <?= $row['disponible'] ?>)">✏️ Editar</button>
+                            <button class="btn-warning btn-sm" onclick="abrirModalEditar(<?= $row['id_domiciliario'] ?>, '<?= htmlspecialchars($row['nombre']) ?>', '<?= $row['telefono'] ?>', '<?= $row['medio_transporte'] ?>', <?= $row['disponible'] ?>)">✏ Editar</button>
                             <a href="domiciliarios.php?eliminar=<?= $row['id_domiciliario'] ?>" class="btn-danger btn-sm" onclick="return confirm('¿Eliminar este domiciliario?')">🗑️</a>
                         </td>
                     </tr>
@@ -136,16 +136,16 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Agregar Domiciliario -->
 <div class="modal" id="modalAgregar">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">➕ Nuevo Domiciliario</h3>
+        <h3 style="color:#00f5ff; margin-bottom:20px;"> Nuevo Domiciliario</h3>
         <form method="POST">
             <input type="hidden" name="accion" value="agregar">
             <input type="text" name="nombre" placeholder="Nombre completo" required>
             <input type="text" name="telefono" placeholder="Teléfono" required>
             <select name="medio_transporte" required>
-                <option value="moto">🏍️ Moto</option>
-                <option value="bicicleta">🚲 Bicicleta</option>
-                <option value="a pie">🚶 A pie</option>
-                <option value="otro">🚗 Otro</option>
+                <option value="moto"> Moto</option>
+                <option value="bicicleta"> Bicicleta</option>
+                <option value="a pie"> A pie</option>
+                <option value="otro"> Otro</option>
             </select>
             <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
                 <input type="checkbox" name="disponible" checked> Disponible
@@ -158,17 +158,17 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Editar Domiciliario -->
 <div class="modal" id="modalEditar">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">✏️ Editar Domiciliario</h3>
+        <h3 style="color:#00f5ff; margin-bottom:20px;"> Editar Domiciliario</h3>
         <form method="POST">
             <input type="hidden" name="accion" value="editar">
             <input type="hidden" name="id_domiciliario" id="edit_id">
             <input type="text" name="nombre" id="edit_nombre" required>
             <input type="text" name="telefono" id="edit_telefono" required>
             <select name="medio_transporte" id="edit_transporte" required>
-                <option value="moto">🏍️ Moto</option>
-                <option value="bicicleta">🚲 Bicicleta</option>
-                <option value="a pie">🚶 A pie</option>
-                <option value="otro">🚗 Otro</option>
+                <option value="moto"> Moto</option>
+                <option value="bicicleta"> Bicicleta</option>
+                <option value="a pie"> A pie</option>
+                <option value="otro"> Otro</option>
             </select>
             <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
                 <input type="checkbox" name="disponible" id="edit_disponible"> Disponible

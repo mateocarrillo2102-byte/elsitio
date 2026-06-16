@@ -67,7 +67,10 @@ if (isset($_GET['eliminar'])) {
     exit;
 }
 
-$sql = "SELECT p.*, c.nombre as cliente_nombre FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente ORDER BY p.id_pedido DESC";
+$sql = "SELECT p.*, u.nombre as cliente_nombre 
+        FROM pedido p 
+        INNER JOIN usuario u ON p.id_usuario = u.id_usuario 
+        ORDER BY p.id_pedido DESC";
 $resultado = mysqli_query($enlace, $sql);
 ?>
 
@@ -84,18 +87,18 @@ $resultado = mysqli_query($enlace, $sql);
     <aside class="sidebar">
         <div class="logo"><h2>EL SITIO</h2><p>Administrador</p></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="admin.php" class="nav-link active">📊 Panel Principal</a></li>
-            <li class="nav-item"><a href="clientes.php" class="nav-link">👥 Clientes</a></li>
-            <li class="nav-item"><a href="productos.php" class="nav-link">🍔 Productos</a></li>
-            <li class="nav-item"><a href="insumos.php" class="nav-link">📦 Insumos</a></li>
-            <li class="nav-item"><a href="producto_insumos.php" class="nav-link">🔗 Prod. × Insumos</a></li>
-            <li class="nav-item"><a href="domiciliarios.php" class="nav-link">🛵 Domiciliarios</a></li>
-            <li class="nav-item"><a href="pedidos.php" class="nav-link active">📦 Pedidos</a></li>
+            <li class="nav-item"><a href="admin.php" class="nav-link active"> Panel Principal</a></li>
+            <li class="nav-item"><a href="clientes.php" class="nav-link"> Clientes</a></li>
+            <li class="nav-item"><a href="productos.php" class="nav-link"> Productos</a></li>
+            <li class="nav-item"><a href="insumos.php" class="nav-link"> Insumos</a></li>
+            <li class="nav-item"><a href="producto_insumos.php" class="nav-link"> Prod. × Insumos</a></li>
+            <li class="nav-item"><a href="domiciliarios.php" class="nav-link"> Domiciliarios</a></li>
+            <li class="nav-item"><a href="pedidos.php" class="nav-link active"> Pedidos</a></li>
         </ul>
-        <div><a href="login.php" class="logout-btn">🚪 Cerrar Sesión</a></div>
+        <a href="Login.html" class="logout-btn"> Cerrar Sesión</a>
     </aside>
     <main class="main-content">
-        <div class="page-header"><h1>📦 Todos los Pedidos</h1></div>
+        <div class="page-header"><h1> Todos los Pedidos</h1></div>
         <div class="table-container">
             <table>
                 <thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Cambiar Estado</th><th>Domiciliario</th><th>Acciones</th></tr></thead>

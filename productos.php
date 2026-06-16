@@ -2,40 +2,84 @@
 session_start();
 include "conexion.php";
 
-// ========== VERIFICAR SI EXISTE LA ACCIÓN ==========
-if (isset($_POST['accion'])) {
-    $accion = $_POST['accion'];
+// ========== AGREGAR PRODUCTO CON IMAGEN ==========
+if ($_POST['accion'] == 'agregar') {
+    $nombre = mysqli_real_escape_string($enlace, $_POST['nombre']);
+    $precio = $_POST['precio'];
+    $stock = $_POST['stock'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
     
-    // Agregar producto
-    if ($accion == 'agregar') {
-        $nombre = mysqli_real_escape_string($enlace, $_POST['nombre']);
-        $precio = $_POST['precio'];
-        $stock = $_POST['stock'];
-        $visible = isset($_POST['visible']) ? 1 : 0;
-        mysqli_query($enlace, "INSERT INTO producto (nombre, precio, stock, visible) VALUES ('$nombre', $precio, $stock, $visible)");
-        header("Location: productos.php");
-        exit;
+    // Subir imagen
+    $imagen = '';
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        $nombre_imagen = time() . '_' . basename($_FILES['imagen']['name']);
+        $carpeta_destino = 'uploads/';
+        
+        // Crear carpeta si no existe
+        if (!file_exists($carpeta_destino)) {
+            mkdir($carpeta_destino, 0777, true);
+        }
+        
+        $ruta_destino = $carpeta_destino . $nombre_imagen;
+        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+            $imagen = $ruta_destino;
+        }
     }
     
-    // Editar disponibilidad (visible)
-    if ($accion == 'toggle_visible') {
-        $id = $_POST['id_producto'];
-        $visible = $_POST['visible'];
-        mysqli_query($enlace, "UPDATE producto SET visible = $visible WHERE id_producto = $id");
-        header("Location: productos.php");
-        exit;
-    }
+    mysqli_query($enlace, "INSERT INTO producto (nombre, precio, stock, visible, imagen) VALUES ('$nombre', $precio, $stock, $visible, '$imagen')");
+    header("Location: productos.php");
+    exit;
 }
 
-// ========== ELIMINAR PRODUCTO (por GET) ==========
+// ========== EDITAR PRODUCTO ==========
+if (isset($_POST['accion']) && $_POST['accion'] == 'editar') {
+    $id = $_POST['id_producto'];
+    $nombre = mysqli_real_escape_string($enlace, $_POST['nombre']);
+    $precio = $_POST['precio'];
+    $stock = $_POST['stock'];
+    
+    // Subir nueva imagen si se selecciona
+    $imagen_actual = $_POST['imagen_actual'];
+    $imagen = $imagen_actual;
+    
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        $nombre_imagen = time() . '_' . basename($_FILES['imagen']['name']);
+        $carpeta_destino = 'uploads/';
+        
+        if (!file_exists($carpeta_destino)) {
+            mkdir($carpeta_destino, 0777, true);
+        }
+        
+        $ruta_destino = $carpeta_destino . $nombre_imagen;
+        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+            $imagen = $ruta_destino;
+            // Eliminar imagen anterior si existe
+            if ($imagen_actual && file_exists($imagen_actual)) {
+                unlink($imagen_actual);
+            }
+        }
+    }
+    
+    mysqli_query($enlace, "UPDATE producto SET nombre='$nombre', precio=$precio, stock=$stock, imagen='$imagen' WHERE id_producto=$id");
+    header("Location: productos.php");
+    exit;
+}
+
+// ========== ELIMINAR PRODUCTO ==========
 if (isset($_GET['eliminar'])) {
     $id = $_GET['eliminar'];
+    // Obtener imagen para eliminarla
+    $res = mysqli_query($enlace, "SELECT imagen FROM producto WHERE id_producto=$id");
+    $row = mysqli_fetch_assoc($res);
+    if ($row['imagen'] && file_exists($row['imagen'])) {
+        unlink($row['imagen']);
+    }
     mysqli_query($enlace, "DELETE FROM producto WHERE id_producto = $id");
     header("Location: productos.php");
     exit;
 }
 
-// ========== CAMBIAR VISIBILIDAD (por GET simple) ==========
+// ========== CAMBIAR VISIBILIDAD ==========
 if (isset($_GET['toggle'])) {
     $id = $_GET['toggle'];
     $visible = $_GET['visible'];
@@ -47,6 +91,14 @@ if (isset($_GET['toggle'])) {
 // ========== OBTENER PRODUCTOS ==========
 $sql = "SELECT * FROM producto ORDER BY id_producto DESC";
 $resultado = mysqli_query($enlace, $sql);
+
+// Obtener producto para editar
+$producto_editar = null;
+if (isset($_GET['editar'])) {
+    $id_editar = $_GET['editar'];
+    $res_editar = mysqli_query($enlace, "SELECT * FROM producto WHERE id_producto=$id_editar");
+    $producto_editar = mysqli_fetch_assoc($res_editar);
+}
 ?>
 
 <!DOCTYPE html>
@@ -72,17 +124,20 @@ $resultado = mysqli_query($enlace, $sql);
         .btn-primary { background: #00f5ff; color: #0a0a0f; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; }
         .btn-warning { background: #ffe600; color: #0a0a0f; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.8rem; }
         .btn-danger { background: #ff2d9e; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+        .btn-success { background: #39ff14; color: #0a0a0f; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { background: #11111a; border: 1px solid #00f5ff; border-radius: 20px; padding: 30px; width: 400px; }
+        .modal-content { background: #11111a; border: 1px solid #00f5ff; border-radius: 20px; padding: 30px; width: 450px; max-width: 90%; }
         .modal-content input, .modal-content select { width: 100%; padding: 12px; margin: 10px 0; background: #1c1c28; border: 1px solid #333; border-radius: 8px; color: white; }
-        .modal-content button { width: 100%; padding: 12px; background: #00f5ff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .modal-content input[type="file"] { padding: 8px; }
+        .modal-content button { width: 100%; padding: 12px; background: #00f5ff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .table-container { background: #11111a; border: 1px solid #1c1c28; border-radius: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid #1c1c28; }
         th { color: #00f5ff; }
         .badge-success { color: #39ff14; font-weight: bold; }
         .badge-danger { color: #ff2d9e; font-weight: bold; }
+        .imagen-miniatura { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; background: #1c1c28; }
         .logout-btn { margin-top: 30px; padding: 12px 20px; background: transparent; border: 1px solid #ff2d9e; color: #ff2d9e; text-decoration: none; display: flex; align-items: center; gap: 10px; border-radius: 10px; }
     </style>
 </head>
@@ -91,19 +146,19 @@ $resultado = mysqli_query($enlace, $sql);
     <aside class="sidebar">
         <div class="logo"><h2>EL SITIO</h2><p>Administrador</p></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="admin.php" class="nav-link">📊 Panel Principal</a></li>
-            <li class="nav-item"><a href="clientes.php" class="nav-link">👥 Clientes</a></li>
-            <li class="nav-item"><a href="productos.php" class="nav-link active">🍔 Productos</a></li>
-            <li class="nav-item"><a href="insumos.php" class="nav-link">📦 Insumos</a></li>
-            <li class="nav-item"><a href="producto_insumos.php" class="nav-link">🔗 Prod. × Insumos</a></li>
-            <li class="nav-item"><a href="domiciliarios.php" class="nav-link">🛵 Domiciliarios</a></li>
-            <li class="nav-item"><a href="pedidos.php" class="nav-link">📦 Pedidos</a></li>
+            <li class="nav-item"><a href="admin.php" class="nav-link">Panel Principal</a></li>
+            <li class="nav-item"><a href="clientes.php" class="nav-link">Clientes</a></li>
+            <li class="nav-item"><a href="productos.php" class="nav-link active">Productos</a></li>
+            <li class="nav-item"><a href="insumos.php" class="nav-link">Insumos</a></li>
+            <li class="nav-item"><a href="producto_insumos.php" class="nav-link">Prod. x Insumos</a></li>
+            <li class="nav-item"><a href="domiciliarios.php" class="nav-link">Domiciliarios</a></li>
+            <li class="nav-item"><a href="pedidos.php" class="nav-link">Pedidos</a></li>
         </ul>
-        <div style="padding: 20px;"><a href="../logout.php" class="logout-btn">🚪 Cerrar Sesión</a></div>
+        <div style="padding: 20px;"><a href="Login.html" class="logout-btn">Cerrar Sesión</a></div>
     </aside>
     <main class="main-content">
         <div class="page-header">
-            <h1>🍔 Productos</h1>
+            <h1>Productos</h1>
             <button class="btn-primary" id="openModalBtn">+ Agregar Producto</button>
         </div>
         <div class="table-container">
@@ -111,6 +166,7 @@ $resultado = mysqli_query($enlace, $sql);
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Stock</th>
@@ -122,21 +178,29 @@ $resultado = mysqli_query($enlace, $sql);
                     <?php while ($row = mysqli_fetch_assoc($resultado)): ?>
                     <tr>
                         <td><?= $row['id_producto'] ?></td>
+                        <td>
+                            <?php if ($row['imagen']): ?>
+                                <img src="<?= $row['imagen'] ?>" class="imagen-miniatura" alt="<?= htmlspecialchars($row['nombre']) ?>">
+                            <?php else: ?>
+                                <span style="color:#666;">Sin imagen</span>
+                            <?php endif; ?>
+                        </td>
                         <td><?= htmlspecialchars($row['nombre']) ?></td>
                         <td>$<?= number_format($row['precio']) ?></td>
                         <td><?= $row['stock'] ?> uds</td>
                         <td>
                             <?php if ($row['visible'] == 1): ?>
-                                <span class="badge-success">✅ Disponible</span>
+                                <span class="badge-success">Disponible</span>
                             <?php else: ?>
-                                <span class="badge-danger">❌ No disponible</span>
+                                <span class="badge-danger">No disponible</span>
                             <?php endif; ?>
                         </td>
                         <td>
+                            <a href="productos.php?editar=<?= $row['id_producto'] ?>" class="btn-warning">Editar</a>
                             <button class="btn-warning" onclick="toggleVisible(<?= $row['id_producto'] ?>, <?= $row['visible'] ?>)">
                                 <?= $row['visible'] == 1 ? 'Desactivar' : 'Activar' ?>
                             </button>
-                            <a href="productos.php?eliminar=<?= $row['id_producto'] ?>" class="btn-danger" onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+                            <a href="productos.php?eliminar=<?= $row['id_producto'] ?>" class="btn-danger" onclick="return confirm('Eliminar este producto?')">Eliminar</a>
                         </td>
                     </tr>
                     <?php endwhile; ?>
@@ -149,12 +213,13 @@ $resultado = mysqli_query($enlace, $sql);
 <!-- Modal Agregar Producto -->
 <div class="modal" id="productoModal">
     <div class="modal-content">
-        <h3 style="color:#00f5ff; margin-bottom:20px;">➕ Nuevo Producto</h3>
-        <form method="POST">
+        <h3 style="color:#00f5ff; margin-bottom:20px;">Nuevo Producto</h3>
+        <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="accion" value="agregar">
             <input type="text" name="nombre" placeholder="Nombre del producto" required>
             <input type="number" step="0.01" name="precio" placeholder="Precio" required>
             <input type="number" name="stock" placeholder="Stock inicial" required>
+            <input type="file" name="imagen" accept="image/*">
             <label style="display:flex; align-items:center; gap:10px; margin:10px 0;">
                 <input type="checkbox" name="visible" checked> Disponible para venta
             </label>
@@ -163,16 +228,49 @@ $resultado = mysqli_query($enlace, $sql);
     </div>
 </div>
 
+<!-- Modal Editar Producto -->
+<div class="modal" id="editarModal">
+    <div class="modal-content">
+        <h3 style="color:#00f5ff; margin-bottom:20px;">Editar Producto</h3>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="accion" value="editar">
+            <input type="hidden" name="id_producto" id="edit_id">
+            <input type="hidden" name="imagen_actual" id="edit_imagen_actual">
+            <input type="text" name="nombre" id="edit_nombre" required>
+            <input type="number" step="0.01" name="precio" id="edit_precio" required>
+            <input type="number" name="stock" id="edit_stock" required>
+            <input type="file" name="imagen" accept="image/*">
+            <div id="edit_imagen_preview" style="margin: 10px 0;"></div>
+            <button type="submit">Actualizar Producto</button>
+        </form>
+    </div>
+</div>
+
 <script>
     document.getElementById('openModalBtn').onclick = () => document.getElementById('productoModal').classList.add('active');
     document.getElementById('productoModal').onclick = (e) => { if (e.target === document.getElementById('productoModal')) document.getElementById('productoModal').classList.remove('active'); };
+    document.getElementById('editarModal').onclick = (e) => { if (e.target === document.getElementById('editarModal')) document.getElementById('editarModal').classList.remove('active'); };
     
     function toggleVisible(id, actual) {
         var nuevo = actual == 1 ? 0 : 1;
-        if (confirm(actual == 1 ? '¿Ocultar este producto del menú?' : '¿Mostrar este producto en el menú?')) {
+        if (confirm(actual == 1 ? 'Ocultar este producto del menu?' : 'Mostrar este producto en el menu?')) {
             window.location.href = 'productos.php?toggle=' + id + '&visible=' + nuevo;
         }
     }
+    
+    <?php if ($producto_editar): ?>
+    window.onload = function() {
+        document.getElementById('edit_id').value = '<?= $producto_editar['id_producto'] ?>';
+        document.getElementById('edit_nombre').value = '<?= htmlspecialchars($producto_editar['nombre']) ?>';
+        document.getElementById('edit_precio').value = '<?= $producto_editar['precio'] ?>';
+        document.getElementById('edit_stock').value = '<?= $producto_editar['stock'] ?>';
+        document.getElementById('edit_imagen_actual').value = '<?= $producto_editar['imagen'] ?>';
+        if ('<?= $producto_editar['imagen'] ?>') {
+            document.getElementById('edit_imagen_preview').innerHTML = '<img src="<?= $producto_editar['imagen'] ?>" style="width:80px; height:80px; object-fit:cover; border-radius:8px;"><p style="color:#888; font-size:0.7rem;">Imagen actual</p>';
+        }
+        document.getElementById('editarModal').classList.add('active');
+    };
+    <?php endif; ?>
 </script>
 </body>
 </html>

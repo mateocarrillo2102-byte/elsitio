@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "conexion.php";
-
+$nombre_usuario = $_SESSION['nombre'] ?? 'Cliente';
 // Inicializar carrito si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
@@ -28,7 +28,7 @@ while ($row = mysqli_fetch_assoc($resultado_productos)) {
     $productos[] = $row;
 }
 
-// Calcular total del carrito para mostrarlo en el sidebar
+// Calcular total del carrito
 $total_carrito = 0;
 $items_carrito = [];
 $total_items = 0;
@@ -96,7 +96,7 @@ foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
             <span>Total:</span>
             <strong id="cartTotal">$<?= number_format($total_carrito) ?></strong>
         </div>
-        <button class="btn-checkout" id="checkoutBtn">✅ Realizar Pedido</button>
+        <button class="btn-checkout" id="checkoutBtn"> Realizar Pedido</button>
     </div>
 </aside>
 
@@ -106,15 +106,22 @@ foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
     <span class="cart-count-badge" id="cartCount"><?= $total_items ?></span>
 </button>
 
+
 <!-- Header principal -->
 <header class="main-header">
     <div class="logo">
-        <h1>🍔 COMIDAS RÁPIDAS EL SITIO</h1>
+        <h1> COMIDAS RÁPIDAS EL SITIO</h1>
     </div>
     <p class="tagline">Los mejores sabores de la ciudad | RÁPIDO, SEGURO Y CERCA DE TI</p>
+    
+    <!-- Mostrar nombre del usuario -->
+    <div style="text-align: center; margin-top: 10px;">
+        <span style="color: #00f5ff; font-size: 0.9rem;">Bienvenido, <?= htmlspecialchars($nombre_usuario) ?></span>
+    </div>
+    
     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
-        <a href="mis_pedidos.php" class="btn-mis-pedidos">📋 Ver Mis Pedidos</a>
-        <a href="login.php" class="btn-logout">🚪 Cerrar Sesión</a>
+        <a href="mis_pedidos.php" class="btn-mis-pedidos"> Ver Mis Pedidos</a>
+        <a href="Login.html" class="btn-logout"> Cerrar Sesión</a>
     </div>
 </header>
 
@@ -126,13 +133,13 @@ foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
     </div>
     <div class="filters">
         <button class="filter-btn active" data-filter="all">Todos</button>
-        <button class="filter-btn" data-filter="hamburguesas">🍔 Hamburguesas</button>
-        <button class="filter-btn" data-filter="perros">🌭 Perros</button>
-        <button class="filter-btn" data-filter="otros">🍟 Otros</button>
+        <button class="filter-btn" data-filter="hamburguesas"> Hamburguesas</button>
+        <button class="filter-btn" data-filter="perros"> Perros</button>
+        <button class="filter-btn" data-filter="otros"> Otros</button>
     </div>
 </div>
 
-<!-- Menú de productos -->
+<!-- Menu de productos -->
 <main class="menu" id="productsGrid">
     <?php foreach ($productos as $producto): ?>
         <div class="card" data-category="<?php 
@@ -141,21 +148,27 @@ foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
             else echo 'otros';
         ?>">
             <div class="card-img">
-                <?php 
-                    if (strpos($producto['nombre'], 'Hamburguesa') !== false) echo '🍔';
-                    elseif (strpos($producto['nombre'], 'Perro') !== false) echo '🌭';
-                    elseif (strpos($producto['nombre'], 'Salchipapa') !== false) echo '🍟';
-                    elseif (strpos($producto['nombre'], 'Costilla') !== false) echo '🍖';
-                    else echo '🥙';
-                ?>
+                <?php if ($producto['imagen'] && file_exists($producto['imagen'])): ?>
+                    <img src="<?= $producto['imagen'] ?>" alt="<?= htmlspecialchars($producto['nombre']) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                <?php else: ?>
+                    <div style="font-size: 3rem; display: flex; align-items: center; justify-content: center; height: 100%;">
+                        <?php 
+                            if (strpos($producto['nombre'], 'Hamburguesa') !== false) echo '🍔';
+                            elseif (strpos($producto['nombre'], 'Perro') !== false) echo '🌭';
+                            elseif (strpos($producto['nombre'], 'Salchipapa') !== false) echo '🍟';
+                            elseif (strpos($producto['nombre'], 'Costilla') !== false) echo '🍖';
+                            else echo '🥙';
+                        ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="card-body">
                 <h3><?= htmlspecialchars($producto['nombre']) ?></h3>
                 <span class="precio">$<?= number_format($producto['precio']) ?></span>
                 <?php if ($producto['max_unidades'] > 0): ?>
-                    <button class="btn add-to-cart" data-id="<?= $producto['id_producto'] ?>">+ Agregar al carrito</button>
+                    <button class="btn add-to-cart" data-id="<?= $producto['id_producto'] ?>">Agregar al carrito</button>
                 <?php else: ?>
-                    <button class="btn disabled" disabled style="opacity:0.5; cursor:not-allowed;">❌ Sin stock</button>
+                    <button class="btn disabled" disabled style="opacity:0.5; cursor:not-allowed;">Sin stock</button>
                 <?php endif; ?>
             </div>
         </div>
@@ -177,9 +190,9 @@ $(document).ready(function() {
             success: function(res) {
                 if (res.success) {
                     actualizarCarrito();
-                    mostrarNotificacion('✅ Producto agregado');
+                    mostrarNotificacion(' Producto agregado');
                 } else {
-                    mostrarNotificacion(res.message || '❌ Error al agregar', true);
+                    mostrarNotificacion(res.message || ' Error al agregar', true);
                 }
             }
         });
@@ -215,7 +228,7 @@ $(document).ready(function() {
                     $('#cartItems').html(html);
                     $('#cartTotal').html('$' + formatearNumero(res.total));
                 } else {
-                    $('#cartItems').html('<div class="empty-cart">🛍️ El carrito está vacío</div>');
+                    $('#cartItems').html('<div class="empty-cart"> El carrito está vacío</div>');
                     $('#cartTotal').html('$0');
                 }
                 asignarEventosCarrito();

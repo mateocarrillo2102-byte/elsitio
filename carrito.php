@@ -106,7 +106,7 @@ if ($is_ajax) {
         
         $observacion = mysqli_real_escape_string($enlace, $_POST['observaciones'] ?? '');
         $metodo_pago = mysqli_real_escape_string($enlace, $_POST['metodo_pago'] ?? 'efectivo');
-        $id_cliente = 1; // Temporal, luego con sesión de usuario
+        $id_usuario = $_SESSION['id_usuario'] ?? 1;
         
         mysqli_begin_transaction($enlace);
         
@@ -138,8 +138,8 @@ if ($is_ajax) {
             }
             
             // Insertar pedido
-            $sql_pedido = "INSERT INTO pedido (fecha_pedido, total, observaciones, id_cliente, metodo_pago, estado) 
-                           VALUES (NOW(), $total, '$observacion', $id_cliente, '$metodo_pago', 'recibido')";
+           $sql_pedido = "INSERT INTO pedido (fecha_pedido, total, observaciones, id_usuario, metodo_pago, estado) 
+               VALUES (NOW(), $total, '$observacion', $id_usuario, '$metodo_pago', 'recibido')";
             
             if (!mysqli_query($enlace, $sql_pedido)) {
                 throw new Exception("Error al guardar pedido: " . mysqli_error($enlace));
@@ -286,10 +286,10 @@ if (!empty($_SESSION['carrito'])) {
 <div class="container">
     <?php if (empty($productos_carrito)): ?>
         <div class="empty-cart">
-            <div class="empty-icon">🛍️</div>
+            <div class="empty-icon"></div>
             <h3>Tu carrito está vacío</h3>
             <p>Agrega productos desde el menú para comenzar</p>
-            <a href="menu.php" class="btn-seguir">Ver Menú</a>
+            <a href="Menu.php" class="btn-seguir">Ver Menú</a>
         </div>
     <?php else: ?>
         <div class="cart-grid">
@@ -320,29 +320,29 @@ if (!empty($_SESSION['carrito'])) {
 
             <div class="order-summary">
                 <h3>Resumen del pedido</h3>
-                <textarea id="observaciones" rows="3" placeholder="📝 ¿Alguna observación? (Ej: Sin cebolla, entregar en portería...)"></textarea>
+                <textarea id="observaciones" rows="3" placeholder=" ¿Alguna observación? (Ej: Sin cebolla, entregar en portería...)"></textarea>
                 
                 <!-- MÉTODOS DE PAGO -->
                 <div class="payment-methods">
-                    <span class="payment-title">💰 MÉTODO DE PAGO</span>
+                    <span class="payment-title"> MÉTODO DE PAGO</span>
                     
                     <label class="payment-option">
                         <input type="radio" name="metodo_pago" value="efectivo" checked>
-                        <span class="payment-icon">💵</span>
+                        <span class="payment-icon"></span>
                         <span class="payment-name">Efectivo al recibir</span>
                         <span class="payment-desc">Paga cuando recibas tu pedido</span>
                     </label>
                     
                     <label class="payment-option">
                         <input type="radio" name="metodo_pago" value="tarjeta">
-                        <span class="payment-icon">💳</span>
+                        <span class="payment-icon"></span>
                         <span class="payment-name">Tarjeta débito/crédito</span>
                         <span class="payment-desc">Visa, Mastercard, American Express</span>
                     </label>
                     
                     <label class="payment-option">
                         <input type="radio" name="metodo_pago" value="transferencia">
-                        <span class="payment-icon">🏦</span>
+                        <span class="payment-icon"></span>
                         <span class="payment-name">Transferencia bancaria</span>
                         <span class="payment-desc">Nequi, Daviplata, Bancolombia</span>
                     </label>
@@ -352,7 +352,7 @@ if (!empty($_SESSION['carrito'])) {
                     <span>Total:</span>
                     <span id="total-amount">$<?php echo number_format($total); ?></span>
                 </div>
-                <button class="btn-checkout" id="checkoutBtn">✅ Realizar Pedido</button>
+                <button class="btn-checkout" id="checkoutBtn"> Realizar Pedido</button>
                 <button class="btn-vaciar" id="vaciarBtn">🗑️ Vaciar Carrito</button>
             </div>
         </div>
@@ -438,10 +438,10 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        mostrarNotificacion('✅ ¡Pedido realizado con éxito!');
+                        mostrarNotificacion(' ¡Pedido realizado con éxito!');
                         setTimeout(() => window.location.href = 'mis_pedidos.php', 2000);
                     } else {
-                        mostrarNotificacion('❌ Error: ' + response.message, true);
+                        mostrarNotificacion(' Error: ' + response.message, true);
                     }
                 }
             });

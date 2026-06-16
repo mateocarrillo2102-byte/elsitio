@@ -94,19 +94,19 @@ $insumos_disponibles = mysqli_query($enlace, "
     <aside class="sidebar">
         <div class="logo"><h2>EL SITIO</h2><p>Administrador</p></div>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="admin.php" class="nav-link">📊 Panel Principal</a></li>
-            <li class="nav-item"><a href="clientes.php" class="nav-link">👥 Clientes</a></li>
-            <li class="nav-item"><a href="productos.php" class="nav-link">🍔 Productos</a></li>
-            <li class="nav-item"><a href="insumos.php" class="nav-link">📦 Insumos</a></li>
-            <li class="nav-item"><a href="producto_insumos.php" class="nav-link active">🔗 Prod. × Insumos</a></li>
-            <li class="nav-item"><a href="domiciliarios.php" class="nav-link">🛵 Domiciliarios</a></li>
-            <li class="nav-item"><a href="pedidos.php" class="nav-link">📦 Pedidos</a></li>
+            <li class="nav-item"><a href="admin.php" class="nav-link"> Panel Principal</a></li>
+            <li class="nav-item"><a href="clientes.php" class="nav-link"> Clientes</a></li>
+            <li class="nav-item"><a href="productos.php" class="nav-link"> Productos</a></li>
+            <li class="nav-item"><a href="insumos.php" class="nav-link"> Insumos</a></li>
+            <li class="nav-item"><a href="producto_insumos.php" class="nav-link active"> Prod. × Insumos</a></li>
+            <li class="nav-item"><a href="domiciliarios.php" class="nav-link"> Domiciliarios</a></li>
+            <li class="nav-item"><a href="pedidos.php" class="nav-link"> Pedidos</a></li>
         </ul>
-        <div style="padding: 20px;"><a href="login.php" class="logout-btn">🚪 Cerrar Sesión</a></div>
+        <div style="padding: 20px;"><a href="Login.html" class="logout-btn"> Cerrar Sesión</a></div>
     </aside>
     <main class="main-content">
         <div class="page-header">
-            <h1>🔗 Relacionar Productos con Insumos</h1>
+            <h1> Relacionar Productos con Insumos</h1>
         </div>
 
         <!-- Selector de producto -->
@@ -123,7 +123,7 @@ $insumos_disponibles = mysqli_query($enlace, "
         </div>
 
         <?php if ($producto_actual): ?>
-            <h2 style="color:#ffe600; margin:20px 0;">🍔 <?= htmlspecialchars($producto_actual['nombre']) ?></h2>
+            <h2 style="color:#ffe600; margin:20px 0;"> <?= htmlspecialchars($producto_actual['nombre']) ?></h2>
             
             <!-- Formulario para agregar insumo -->
             <div class="form-inline">
@@ -157,7 +157,7 @@ $insumos_disponibles = mysqli_query($enlace, "
                             <td><?= $item['cantidad_usada'] ?></td>
                             <td><?= $item['cantidad_disponible'] ?></td>
                             <td style="color: <?= $stock_suficiente ? '#39ff14' : '#ff2d9e' ?>">
-                                <?= $stock_suficiente ? '✓ Suficiente' : '⚠️ Stock bajo' ?>
+                                <?= $stock_suficiente ? '✓ Suficiente' : '⚠ Stock bajo' ?>
                             </td>
                             <td><a href="producto_insumos.php?eliminar=<?= $item['id_insumo'] ?>&id_producto=<?= $id_producto ?>" class="btn-danger" onclick="return confirm('¿Eliminar este insumo del producto?')">Eliminar</a></td>
                         </tr>
@@ -170,7 +170,7 @@ $insumos_disponibles = mysqli_query($enlace, "
             </div>
         <?php else: ?>
             <div style="text-align:center; padding:60px; background:#11111a; border-radius:20px;">
-                <span style="font-size:4rem;">🔗</span>
+                <span style="font-size:4rem;"></span>
                 <p style="margin-top:20px;">Selecciona un producto para gestionar sus insumos</p>
             </div>
         <?php endif; ?>
