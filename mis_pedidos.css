@@ -1,0 +1,72 @@
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #fff; padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #00f5ff; margin-bottom: 30px; text-align: center; }
+        .pedido-card {
+            background: #11111a;
+            border: 1px solid rgba(0,245,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .pedido-card:hover { border-color: #00f5ff; transform: translateY(-3px); }
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1c1c28;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .pedido-id { font-size: 1rem; font-weight: 700; color: #ffe600; background: #1c1c28; padding: 4px 12px; border-radius: 20px; }
+        .pedido-fecha { color: #888; font-size: 0.85rem; }
+        .estado {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .estado-pendiente { background: #ff2d9e; color: #fff; }
+        .estado-preparando { background: #00f5ff; color: #000; }
+        .estado-enviado { background: #ffe600; color: #000; }
+        .estado-entregado { background: #39ff14; color: #000; }
+        .pedido-total { font-size: 1.2rem; font-weight: 700; color: #00f5ff; margin: 10px 0; }
+        .productos-lista {
+            background: #1c1c28;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .producto-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a2a3a;
+        }
+        .producto-nombre { color: #fff; }
+        .producto-cantidad { color: #ffe600; }
+        .producto-subtotal { color: #00f5ff; }
+        .btn-volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #00f5ff, #ff2d9e);
+            color: #0a0a0f;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,245,255,0.4);
+        }
+        .sin-pedidos {
+            text-align: center;
+            padding: 60px;
+            background: #11111a;
+            border-radius: 20px;
+        }

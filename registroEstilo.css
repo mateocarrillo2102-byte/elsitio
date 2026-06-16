@@ -1,0 +1,141 @@
+/* style.css */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #000000;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.scene {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Tarjeta */
+.card {
+  background: #09091a;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 360px;
+  position: relative;
+}
+
+/* Esquinas decorativas */
+.corner { position: absolute; width: 10px; height: 10px; }
+.tl { top: 8px; left: 8px; border-top: 1px solid #00f5ff; border-left: 1px solid #00f5ff; }
+.tr { top: 8px; right: 8px; border-top: 1px solid #ff2d9e; border-right: 1px solid #ff2d9e; }
+.bl { bottom: 8px; left: 8px; border-bottom: 1px solid #39ff14; border-left: 1px solid #39ff14; }
+.br { bottom: 8px; right: 8px; border-bottom: 1px solid #00f5ff; border-right: 1px solid #00f5ff; }
+
+/* Logo */
+.logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.logo .b { color: #00f5ff; text-shadow: 0 0 10px #00f5ff; }
+.logo .p { color: #ff2d9e; text-shadow: 0 0 10px #ff2d9e; }
+.logo .g { color: #39ff14; text-shadow: 0 0 10px #39ff14; }
+
+.sub {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #555;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0,255,255,0.25), rgba(255,0,255,0.25), transparent);
+  margin-bottom: 2rem;
+}
+
+/* Labels */
+label { display: block; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.lb { color: #00f5ff; }
+.lp { color: #ff2d9e; }
+
+/* Campos */
+.field { position: relative; margin-bottom: 1.4rem; }
+
+.field input {
+  width: 100%;
+  background: #0d0d22;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 0.65rem 0.9rem;
+  color: #fff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus {
+  border-color: #00f5ff;
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
+}
+.field input::placeholder { color: #333; }
+
+/* Fila recordar / olvidaste */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+.check-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: #888;
+  cursor: pointer;
+}
+.check-wrap input[type="checkbox"] { accent-color: #39ff14; width: 14px; height: 14px; }
+
+.forgot {
+  font-size: 0.7rem;
+  color: #ff2d9e;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+}
+.forgot:hover { text-shadow: 0 0 6px #ff2d9e; }
+
+/* Botón */
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: #00f5ff;
+  color: #050510;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background: #ff2d9e;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 45, 158, 0.5);
+}
+.btn:active { transform: scale(0.97); }
+
+/* Registro */
+.register { text-align: center; margin-top: 1.4rem; font-size: 0.7rem; color: #555; }
+.register a { color: #39ff14; text-decoration: none; }
+.register a:hover { text-shadow: 0 0 6px #39ff14; }
